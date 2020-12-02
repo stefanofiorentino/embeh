@@ -4,6 +4,8 @@
 #include <tuple>
 #include <memory>
 
+#include "type_pool_storage.hpp"
+
 namespace embeh
 {
     template <std::size_t N = 1>
