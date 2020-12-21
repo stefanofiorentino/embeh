@@ -20,7 +20,7 @@ namespace embeh
 
         /* head */
         template <typename E>
-        E *head()
+        E *get_head()
         {
             return reinterpret_cast<E *>(get_avail_list<E>().head);
         }
@@ -50,10 +50,10 @@ namespace embeh
                     return;
                 }
                 auto tmp_ptr = static_cast<avail_block<E> *>(pv);
-                tmp_ptr->next = reinterpret_cast<avail_block<E> *>(head<E>());
+                tmp_ptr->next = reinterpret_cast<avail_block<E> *>(get_head<E>());
                 const_cast<type_pool_storage<avail_types...> *>(this)->set_head<E>(tmp_ptr);
             };
-            auto *pt = reinterpret_cast<E *>(head<E>());
+            auto *pt = reinterpret_cast<E *>(get_head<E>());
             if (pt == nullptr)
             {
                 return std::unique_ptr<E, decltype(custom_deleter)>(nullptr, custom_deleter);
@@ -85,7 +85,7 @@ namespace embeh
         {
             avail_list<E> type_list;
         };
-        
+
         std::tuple<handler<avail_types>...> type_pool;
     };
 } // namespace embeh
