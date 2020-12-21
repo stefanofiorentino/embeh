@@ -33,7 +33,7 @@ namespace embeh
 
         /* next */
         template <typename E>
-        E *next()
+        E *get_next()
         {
             if (!get_avail_list<E>().head)
                 return nullptr;
