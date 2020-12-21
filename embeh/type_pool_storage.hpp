@@ -11,38 +11,36 @@ namespace embeh
     template <typename... avail_types>
     struct type_pool_storage
     {
+        /* avail_list */
         template <typename E>
-        struct handler
+        avail_list<E> &get_avail_list()
         {
-            avail_list<E> type_list;
-        };
-
-        template <typename E>
-        handler<E> &get_handler()
-        {
-            return std::get<handler<E>>(type_pool);
+            return std::get<handler<E>>(type_pool).type_list;
         }
 
+        /* head */
         template <typename E>
         E *head()
         {
-            return reinterpret_cast<E *>(get_handler<E>().type_list.head);
+            return reinterpret_cast<E *>(get_avail_list<E>().head);
         }
 
         template <typename E>
         void set_head(avail_block<E> *pv)
         {
-            get_handler<E>().type_list.set_head(pv);
+            get_avail_list<E>().set_head(pv);
         }
 
+        /* next */
         template <typename E>
         E *next()
         {
-            if (!get_handler<E>().type_list.head)
+            if (!get_avail_list<E>().head)
                 return nullptr;
-            return reinterpret_cast<E *>(get_handler<E>().type_list.head->next);
+            return reinterpret_cast<E *>(get_avail_list<E>().head->next);
         }
 
+        /* single point of creation */
         template <typename E, typename... Args>
         auto create(Args... args)
         {
@@ -60,7 +58,7 @@ namespace embeh
             {
                 return std::unique_ptr<E, decltype(custom_deleter)>(nullptr, custom_deleter);
             }
-            get_handler<E>().type_list.head = get_handler<E>().type_list.head->next;
+            set_head<E>(get_avail_list<E>().head->next);
 
             if (!pt->init(std::forward<Args>(args)...))
             {
@@ -69,6 +67,7 @@ namespace embeh
             return std::unique_ptr<E, decltype(custom_deleter)>(pt, custom_deleter);
         }
 
+        /* destructor with static asserts on avail_types */
         ~type_pool_storage()
         {
             static_test<(std::is_convertible_v<std::size_t, decltype(avail_types::size)> && ...)>();
@@ -80,6 +79,13 @@ namespace embeh
         }
 
     private:
+        /* handler */
+        template <typename E>
+        struct handler
+        {
+            avail_list<E> type_list;
+        };
+        
         std::tuple<handler<avail_types>...> type_pool;
     };
 } // namespace embeh
