@@ -31,5 +31,4 @@ namespace embeh
         avail_block<T> blocks[num_blocks];
         avail_block<T> *head;
     };
-
 } // namespace embeh
