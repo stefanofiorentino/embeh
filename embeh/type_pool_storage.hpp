@@ -8,9 +8,6 @@
 
 namespace embeh
 {
-    template <std::size_t N = 1>
-    struct type_pool_storage_base;
-
     template <typename... avail_types>
     struct type_pool_storage
     {
@@ -85,25 +82,4 @@ namespace embeh
     private:
         std::tuple<handler<avail_types>...> type_pool;
     };
-
-    template <std::size_t N>
-    struct type_pool_storage_base
-    {
-        static constexpr std::size_t size = N;
-
-        virtual ~type_pool_storage_base() noexcept = default;
-
-        bool init()
-        {
-            return true;
-        }
-
-    private:
-        type_pool_storage_base() = default;
-        type_pool_storage_base(type_pool_storage_base const &) = delete;
-        type_pool_storage_base &operator=(type_pool_storage_base const &) = delete;
-        type_pool_storage_base(type_pool_storage_base &&) = delete;
-        type_pool_storage_base &operator=(type_pool_storage_base &&) = delete;
-    };
-
 } // namespace embeh
