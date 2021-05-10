@@ -5,8 +5,17 @@ namespace embeh
     template <typename T>
     union avail_block
     {
-        avail_block *next;
-        alignas(alignof(T)) char memory[sizeof(T)];
+        void set_next(avail_block *abp)
+        {
+            m_next = abp;
+        }
+        avail_block *next()
+        {
+            return m_next;
+        }
+    private:
+        avail_block *m_next;
+        alignas(alignof(T)) char memory[sizeof(T)];        
     };
 
     template <typename T>
@@ -15,20 +24,27 @@ namespace embeh
         static constexpr std::size_t num_blocks = T::size;
 
         avail_list()
-            : head(blocks)
+            : m_head(blocks)
         {
             for (auto i = 0u; i < num_blocks - 1; ++i)
             {
-                blocks[i].next = &blocks[i + 1];
+                blocks[i].set_next(&blocks[i + 1]);
             }
-            blocks[num_blocks - 1].next = nullptr;
+            blocks[num_blocks - 1].set_next(nullptr);
         }
 
         void set_head(avail_block<T> *pv)
         {
-            head = pv;
+            m_head = pv;
         }
+
+        avail_block<T> *head()
+        {
+            return m_head;
+        }
+
+    private:
         avail_block<T> blocks[num_blocks];
-        avail_block<T> *head;
+        avail_block<T> *m_head;
     };
 } // namespace embeh

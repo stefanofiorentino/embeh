@@ -15,14 +15,14 @@ namespace embeh
         template <typename E>
         avail_list<E> &get_avail_list()
         {
-            return std::get<handler<E>>(type_pool).type_list;
+            return std::get<handler<E>>(type_pool).m_type_list;
         }
 
         /* head */
         template <typename E>
         E *get_head()
         {
-            return reinterpret_cast<E *>(get_avail_list<E>().head);
+            return reinterpret_cast<E *>(get_avail_list<E>().head());
         }
 
         template <typename E>
@@ -35,9 +35,9 @@ namespace embeh
         template <typename E>
         E *get_next()
         {
-            if (!get_avail_list<E>().head)
+            if (!get_avail_list<E>().head())
                 return nullptr;
-            return reinterpret_cast<E *>(get_avail_list<E>().head->next);
+            return reinterpret_cast<E *>(get_avail_list<E>().head()->next());
         }
 
         /* single point of creation */
@@ -50,7 +50,7 @@ namespace embeh
                     return;
                 }
                 auto tmp_ptr = static_cast<avail_block<E> *>(pv);
-                tmp_ptr->next = reinterpret_cast<avail_block<E> *>(get_head<E>());
+                tmp_ptr->set_next(reinterpret_cast<avail_block<E> *>(get_head<E>()));
                 const_cast<type_pool_storage<avail_types...> *>(this)->set_head<E>(tmp_ptr);
             };
             auto *pt = reinterpret_cast<E *>(get_head<E>());
@@ -58,7 +58,7 @@ namespace embeh
             {
                 return std::unique_ptr<E, decltype(custom_deleter)>(nullptr, custom_deleter);
             }
-            set_head<E>(get_avail_list<E>().head->next);
+            set_head<E>(get_avail_list<E>().head()->next());
 
             if (!pt->init(std::forward<Args>(args)...))
             {
@@ -83,7 +83,7 @@ namespace embeh
         template <typename E>
         struct handler
         {
-            avail_list<E> type_list;
+            avail_list<E> m_type_list;
         };
 
         std::tuple<handler<avail_types>...> type_pool;
