@@ -8,11 +8,11 @@ using embeh::avail_list;
 using embeh::type_pool_storage;
 
 template <std::size_t N=1>	
-struct type_pool_storage_base	
+struct sample_base_class	
 {	
     static constexpr std::size_t size = N;	
 
-    virtual ~type_pool_storage_base() noexcept = default;	
+    virtual ~sample_base_class() noexcept = default;	
 
     bool init()	
     {	
@@ -20,14 +20,14 @@ struct type_pool_storage_base
     }	
 
 private:	
-    type_pool_storage_base() = default;	
-    type_pool_storage_base(type_pool_storage_base const &) = delete;	
-    type_pool_storage_base &operator=(type_pool_storage_base const &) = delete;	
-    type_pool_storage_base(type_pool_storage_base &&) = delete;	
-    type_pool_storage_base &operator=(type_pool_storage_base &&) = delete;	
+    sample_base_class() = default;	
+    sample_base_class(sample_base_class const &) = delete;	
+    sample_base_class &operator=(sample_base_class const &) = delete;	
+    sample_base_class(sample_base_class &&) = delete;	
+    sample_base_class &operator=(sample_base_class &&) = delete;	
 };
 
-struct dummy_type : public type_pool_storage_base<>
+struct dummy_type : public sample_base_class<>
 {
 };
 
@@ -39,7 +39,7 @@ static bool type_pool_templatization()
     return status;
 }
 
-struct dummy_type_1 : public type_pool_storage_base<>
+struct dummy_type_1 : public sample_base_class<>
 {
     double m_d{};
     float m_f{};
@@ -69,7 +69,7 @@ bool type_pool_size_is_one()
     return status;
 }
 
-struct dummy_type_2 : public type_pool_storage_base<10>
+struct dummy_type_2 : public sample_base_class<10>
 {
     bool init(double d, float f, int i)
     {
