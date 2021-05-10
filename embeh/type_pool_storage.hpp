@@ -70,12 +70,12 @@ namespace embeh
         /* destructor with static asserts on avail_types */
         ~type_pool_storage()
         {
-            static_test<(std::is_convertible_v<std::size_t, decltype(avail_types::size)> && ...)>();
-            static_test<(not std::is_default_constructible_v<avail_types> && ...)>();
-            static_test<(not std::is_copy_assignable_v<avail_types> && ...)>();
-            static_test<(not std::is_copy_constructible_v<avail_types> && ...)>();
-            static_test<(not std::is_move_assignable_v<avail_types> && ...)>();
-            static_test<(not std::is_move_constructible_v<avail_types> && ...)>();
+            static_assert((std::is_convertible_v<std::size_t, decltype(avail_types::size)> && ...));
+            static_assert((not std::is_default_constructible_v<avail_types> && ...));
+            static_assert((not std::is_copy_assignable_v<avail_types> && ...));
+            static_assert((not std::is_copy_constructible_v<avail_types> && ...));
+            static_assert((not std::is_move_assignable_v<avail_types> && ...));
+            static_assert((not std::is_move_constructible_v<avail_types> && ...));
         }
 
     private:
