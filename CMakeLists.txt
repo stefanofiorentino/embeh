@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(embeh VERSION 0.1.0)
 
-add_library(embeh embeh.cpp)
-
 set(DEVEL_DIRECTORY $ENV{HOME}/devel)
 set(GIT_REPO_DIRECTORY ${DEVEL_DIRECTORY})
 set(DEPS_DIRECTORY ${PROJECT_BINARY_DIR}/_deps)
