@@ -2,7 +2,6 @@
 #include <type_traits>
 #include <memory>
 
-#include <include/lefticus/static_test.hpp>
 #include <embeh/type_pool_storage.hpp>
 
 using embeh::avail_list;
@@ -94,8 +93,8 @@ bool type_pool_accessing_members()
     static_assert(std::is_same_v<decltype(dt1->m_f), float>);
     static_assert(std::is_same_v<decltype(dt1->m_i), int>);
 
-    static_test<1 == dummy_type::size>();
-    static_test<10 == dummy_type_2::size>();
+    static_assert(1 == dummy_type::size);
+    static_assert(10 == dummy_type_2::size);
 
     status &= (std::abs(1. - dt1->m_d) < 0.0000001f);
     status &= (std::abs(1.f - dt1->m_f) < 0.001f);
