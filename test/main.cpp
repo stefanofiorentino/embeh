@@ -46,7 +46,7 @@ struct dummy_type_1 : public sample_base_class<>
     int m_i{};
 };
 
-bool type_pool_type_pool_storage()
+static bool type_pool_type_pool_storage()
 {
     bool status{true};
     type_pool_storage<dummy_type, dummy_type_1> tps;
@@ -57,7 +57,7 @@ bool type_pool_type_pool_storage()
     return status;
 }
 
-bool type_pool_size_is_one()
+static bool type_pool_size_is_one()
 {
     bool status{true};
     type_pool_storage<dummy_type, dummy_type_1> tps;
@@ -84,7 +84,7 @@ struct dummy_type_2 : public sample_base_class<10>
     int m_i{};
 };
 
-bool type_pool_accessing_members()
+static bool type_pool_accessing_members()
 {
     bool status{true};
     type_pool_storage<dummy_type, dummy_type_1, dummy_type_2> tps;
@@ -102,7 +102,7 @@ bool type_pool_accessing_members()
     return status;
 }
 
-bool type_pool_type_out_of_block()
+static bool type_pool_type_out_of_block()
 {
     bool status{true};
     type_pool_storage<dummy_type> tps;
@@ -118,6 +118,7 @@ int main()
     assert(type_pool_templatization());
     assert(type_pool_type_pool_storage());
     assert(type_pool_size_is_one());
+    assert(type_pool_accessing_members());
     assert(type_pool_type_out_of_block());
     return 0;
 }
